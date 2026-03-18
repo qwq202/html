@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重要请求</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #00ff88;
+            --primary-dark: #00cc6a;
+            --danger: #ff3366;
+            --bg-dark: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 背景流体装饰 */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.6;
+        }
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #4f46e5;
+            top: -100px;
+            left: -100px;
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background: #ec4899;
+            bottom: -50px;
+            right: -50px;
+            border-radius: 50%;
+            animation: float 12s infinite ease-in-out alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--glass-border);
+            font-size: 36px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 255, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+        }
+
+        h1 {
+            color: var(--text-main);
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 35px;
+        }
+
+        .buttons-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            min-height: 55px;
+        }
+
+        .btn {
+            height: 55px;
+            padding: 0 36px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        .btn-agree {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-agree:hover {
+            background: #1aff9d;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 12px 25px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-agree:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* 不同意按钮 */
+        .btn-disagree {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative; 
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-disagree.evading {
+            position: fixed;
+            z-index: 100;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .btn-disagree:hover:not(.evading) {
+            background: rgba(255, 51, 102, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .message-box {
+            margin-top: 0;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .message-box.show {
+            margin-top: 25px;
+            height: auto;
+            opacity: 1;
+        }
+
+        .success-text {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 255, 136, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* 隐藏掉按钮后居中显示 */
+        .buttons-wrapper.agreed {
+            justify-content: center;
+        }
+        .buttons-wrapper.agreed .btn-disagree {
+            display: none;
+        }
+        .buttons-wrapper.agreed .btn-agree {
+            pointer-events: none;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            box-shadow: none;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container" id="main-card">
+        <div class="icon-wrapper" id="icon">
+            💸
+        </div>
+        <h1 id="title">你同意给我500元吗？</h1>
+        <p class="subtitle" id="subtitle">这是一个非常重要且严肃的决定，请谨慎选择。</p>
+        
+        <div class="buttons-wrapper" id="btn-wrapper">
+            <button class="btn btn-agree" id="btn-agree" onclick="handleAgree()">同意</button>
+            <button class="btn btn-disagree" id="btn-disagree">不同意</button>
+        </div>
+
+        <div class="message-box" id="message-box">
+            <div class="success-text">🎉 太好了！老板大气！</div>
+        </div>
+    </div>
+
+    <script>
+        const btnDisagree = document.getElementById('btn-disagree');
+        const btnAgree = document.getElementById('btn-agree');
+        const btnWrapper = document.getElementById('btn-wrapper');
+        const messageBox = document.getElementById('message-box');
+        const mainCard = document.getElementById('main-card');
+        const icon = document.getElementById('icon');
+        const title = document.getElementById('title');
+        const subtitle = document.getElementById('subtitle');
+
+        let isAgreed = false;
+        let disagreeCount = 0;
+        const disagreeTexts = [
+            "不同意", 
+            "你确定吗？", 
+            "再仔细想想？", 
+            "不给不行！", 
+            "求求你了！", 
+            "呜呜呜...", 
+            "心要碎了...", 
+            "真的不再考虑吗？", 
+            "你这人怎么这样",
+            "最后一次机会！"
+        ];
+        
+        // 点击不同意按钮逻辑：同意变大，不同意文本改变，且同一级按钮文本也可能变
+        btnDisagree.addEventListener('click', () => {
+            if (isAgreed) return;
+            disagreeCount++;
+            
+            // 改变不同意按钮的文本
+            const textIndex = Math.min(disagreeCount, disagreeTexts.length - 1);
+            btnDisagree.textContent = disagreeTexts[textIndex];
+            
+            // 改变同意按钮的文本
+            if (disagreeCount >= 2) {
+                btnAgree.textContent = "必须同意！";
+            }
+            if (disagreeCount >= 4) {
+                btnAgree.textContent = "快点同意啦！";
+            }
+            if (disagreeCount >= 6) {
+                btnAgree.textContent = "点这里！！！";
+            }
+            
+            // 同意按钮变大
+            const newFontSize = 16 + (disagreeCount * 12);
+            const newPadding = 36 + (disagreeCount * 15);
+            const newHeight = 55 + (disagreeCount * 22);
+            
+            btnAgree.style.fontSize = newFontSize + 'px';
+            btnAgree.style.padding = `0 ${newPadding}px`;
+            btnAgree.style.height = newHeight + 'px';
+            
+            // 防止主卡片宽度被限制而把大按钮挤压
+            mainCard.style.maxWidth = '100vw';
+        });
+
+        // "同意" 逻辑
+        function handleAgree() {
+            if (isAgreed) return;
+            isAgreed = true;
+
+            // 撒花特效 (Confetti)
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#00ff88', '#fff', '#8b5cf6']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#00ff88', '#fff', '#ec4899']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // 更新UI元素
+            icon.textContent = "💖";
+            icon.style.animation = "none";
+            icon.style.transform = "scale(1.1)";
+            icon.style.background = "linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,255,136,0))";
+            icon.style.borderColor = "var(--primary)";
+            icon.style.boxShadow = "0 0 30px rgba(0, 255, 136, 0.4)";
+
+            title.textContent = "交易达成！";
+            title.style.color = "var(--primary)";
+            subtitle.textContent = "感谢老板的支持，好人一生平安！";
+
+            // 按钮状态更新
+            btnWrapper.classList.add('agreed');
+            
+            // 点击同意后重置按钮视觉状态到自然
+            btnAgree.style.fontSize = '';
+            btnAgree.style.padding = '';
+            btnAgree.style.height = '';
+            btnAgree.textContent = "已同意";
+            
+            // 隐藏不同意按钮
+            btnDisagree.style.display = 'none';
+
+            // 显示成功信息
+            messageBox.classList.add('show');
+            
+            // 卡片微级弹跳效果
+            mainCard.style.transform = "scale(1.03)";
+            setTimeout(() => {
+                mainCard.style.transform = "scale(1)";
+            }, 300);
+        }
+    </script>
+</body>
+</html>
