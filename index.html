@@ -3,387 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>重要请求</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <title>AI 视频生成模型 | 目录</title>
+    <link rel="icon" id="favicon">
+    <script>
+        window.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            
+            // 绘制蓝色字母 V
+            ctx.fillStyle = '#2563eb';
+            ctx.font = 'bold 40px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('V', 32, 34);
+            
+            // 设置 favicon
+            document.getElementById('favicon').href = canvas.toDataURL('image/png');
+        };
+    </script>
     <style>
-        :root {
-            --primary: #00ff88;
-            --primary-dark: #00cc6a;
-            --danger: #ff3366;
-            --bg-dark: #0f172a;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+        @font-face {
+            font-family: 'Space Grotesk';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url('fonts/SpaceGrotesk-400.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Space Grotesk';
+            font-style: normal;
+            font-weight: 500;
+            font-display: swap;
+            src: url('fonts/SpaceGrotesk-500.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Space Grotesk';
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+            src: url('fonts/SpaceGrotesk-600.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Space Grotesk';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url('fonts/SpaceGrotesk-700.ttf') format('truetype');
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
-            overflow: hidden;
-            position: relative;
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* 背景流体装饰 */
-        .blob {
-            position: absolute;
-            filter: blur(80px);
-            z-index: 0;
-            opacity: 0.6;
-        }
-        .blob-1 {
-            width: 400px;
-            height: 400px;
-            background: #4f46e5;
-            top: -100px;
-            left: -100px;
-            border-radius: 50%;
-            animation: float 10s infinite ease-in-out alternate;
-        }
-        .blob-2 {
-            width: 300px;
-            height: 300px;
-            background: #ec4899;
-            bottom: -50px;
-            right: -50px;
-            border-radius: 50%;
-            animation: float 12s infinite ease-in-out alternate-reverse;
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.1); }
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: 50px 40px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            max-width: 450px;
-            width: 90%;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 24px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--glass-border);
-            font-size: 36px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 255, 136, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
-        }
-
-        h1 {
-            color: var(--text-main);
-            font-size: 26px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            line-height: 1.4;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            letter-spacing: 1px;
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 35px;
-        }
-
-        .buttons-wrapper {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            min-height: 55px;
-        }
-
-        .btn {
-            height: 55px;
-            padding: 0 36px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            outline: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            letter-spacing: 0.5px;
-            z-index: 10;
-        }
-
-        .btn-agree {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
-        }
-
-        .btn-agree:hover {
-            background: #1aff9d;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 12px 25px rgba(0, 255, 136, 0.4);
-        }
-
-        .btn-agree:active {
-            transform: translateY(1px) scale(0.98);
-        }
-
-        /* 不同意按钮 */
-        .btn-disagree {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative; 
-            backdrop-filter: blur(5px);
-        }
-
-        .btn-disagree.evading {
+        nav {
             position: fixed;
-            z-index: 100;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            border-color: var(--danger);
-            color: var(--danger);
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 250, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            padding: 1.5rem 3rem;
         }
 
-        .btn-disagree:hover:not(.evading) {
-            background: rgba(255, 51, 102, 0.1);
-            border-color: var(--danger);
-            color: var(--danger);
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .message-box {
-            margin-top: 0;
-            height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: all 0.5s ease;
-        }
-
-        .message-box.show {
-            margin-top: 25px;
-            height: auto;
-            opacity: 1;
-        }
-
-        .success-text {
-            color: var(--primary);
-            font-size: 18px;
+        .logo {
+            font-size: 1.25rem;
             font-weight: 600;
-            text-shadow: 0 2px 10px rgba(0, 255, 136, 0.2);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #1a1a1a;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+
+        header {
+            padding: 12rem 0 8rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 6rem;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        header p {
+            font-size: 1.25rem;
+            color: #666;
+            max-width: 540px;
+            line-height: 1.7;
+        }
+
+        .meta {
+            margin-top: 3rem;
+            display: flex;
+            gap: 3rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #999;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .model-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .model-item {
+            display: grid;
+            grid-template-columns: 3rem 1fr auto;
+            gap: 2rem;
+            padding: 2.5rem 0;
+            border-bottom: 1px solid #eee;
+            align-items: start;
+            transition: background 0.2s;
+        }
+
+        .model-item:hover {
+            background: #fff;
+            margin: 0 -1.5rem;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .rank {
+            font-size: 0.875rem;
+            color: #999;
+            font-weight: 500;
+            padding-top: 0.25rem;
+        }
+
+        .model-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .model-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            gap: 1rem;
         }
 
-        @keyframes bounceIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        .model-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
         }
 
-        /* 隐藏掉按钮后居中显示 */
-        .buttons-wrapper.agreed {
-            justify-content: center;
-        }
-        .buttons-wrapper.agreed .btn-disagree {
-            display: none;
-        }
-        .buttons-wrapper.agreed .btn-agree {
-            pointer-events: none;
-            background: rgba(255,255,255,0.05);
-            color: var(--text-muted);
-            box-shadow: none;
-            border: 1px solid rgba(255,255,255,0.1);
+        .model-company {
+            font-size: 0.875rem;
+            color: #999;
         }
 
+        .model-desc {
+            font-size: 0.95rem;
+            color: #666;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .model-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            color: #666;
+            background: #f0f0f0;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        .model-action {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.75rem;
+        }
+
+        .price {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .price strong {
+            color: #1a1a1a;
+            font-size: 1rem;
+        }
+
+        .link {
+            font-size: 0.8rem;
+            color: #1a1a1a;
+            text-decoration: none;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.1rem;
+            transition: border-color 0.2s;
+        }
+
+        .link:hover {
+            border-color: #1a1a1a;
+        }
+
+        .model-item a.model-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: contents;
+        }
+
+        .model-item a.model-card-link:hover {
+            text-decoration: none;
+        }
+
+        .model-item:has(.model-card-link:hover) {
+            background: #fff;
+            margin: 0 -1.5rem;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .badge {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .badge-top {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .badge-new {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        footer {
+            max-width: 1200px;
+            margin: 8rem auto 4rem;
+            padding: 0 3rem;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.85rem;
+            }
+
+            main {
+                padding: 0 1.5rem;
+            }
+
+            header {
+                padding: 8rem 0 4rem;
+                margin-bottom: 3rem;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .meta {
+                flex-direction: column;
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            .model-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 2rem 0;
+            }
+
+            .rank {
+                display: none;
+            }
+
+            .model-header {
+                flex-wrap: wrap;
+            }
+
+            .model-name {
+                font-size: 1.25rem;
+            }
+
+            .model-desc {
+                font-size: 0.9rem;
+            }
+
+            .model-action {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding-top: 1rem;
+            }
+
+            footer {
+                padding: 0 1.5rem;
+                margin: 4rem auto 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .model-item:hover {
+                margin: 0 -1rem;
+                padding: 1.5rem 1rem;
+            }
+
+            .tag {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-
-    <div class="container" id="main-card">
-        <div class="icon-wrapper" id="icon">
-            💸
+    <nav>
+        <div class="nav-content">
+            <div class="logo">AI Video</div>
+            <ul class="nav-links">
+                <li><a href="index.html#model-list">Models</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
         </div>
-        <h1 id="title">你同意给我500元吗？</h1>
-        <p class="subtitle" id="subtitle">这是一个非常重要且严肃的决定，请谨慎选择。</p>
-        
-        <div class="buttons-wrapper" id="btn-wrapper">
-            <button class="btn btn-agree" id="btn-agree" onclick="handleAgree()">同意</button>
-            <button class="btn btn-disagree" id="btn-disagree">不同意</button>
-        </div>
+    </nav>
 
-        <div class="message-box" id="message-box">
-            <div class="success-text">🎉 太好了！老板大气！</div>
-        </div>
-    </div>
+    <main>
+        <header>
+            <h1>AI 视频生成模型<br>精选目录</h1>
+            <p>收录当前最优秀的 AI 视频生成工具，基于性能、质量和易用性综合评估。</p>
+            <div class="meta">
+                <div class="meta-item">
+                    <span class="meta-label">收录数量</span>
+                    <span class="meta-value">17 个模型</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">更新时间</span>
+                    <span class="meta-value">2026 年 3 月</span>
+                </div>
+            </div>
+        </header>
 
-    <script>
-        const btnDisagree = document.getElementById('btn-disagree');
-        const btnAgree = document.getElementById('btn-agree');
-        const btnWrapper = document.getElementById('btn-wrapper');
-        const messageBox = document.getElementById('message-box');
-        const mainCard = document.getElementById('main-card');
-        const icon = document.getElementById('icon');
-        const title = document.getElementById('title');
-        const subtitle = document.getElementById('subtitle');
+        <section class="model-list" id="model-list"></section>
+    </main>
 
-        let isAgreed = false;
-        let disagreeCount = 0;
-        const disagreeTexts = [
-            "不同意", 
-            "你确定吗？", 
-            "再仔细想想？", 
-            "不给不行！", 
-            "求求你了！", 
-            "呜呜呜...", 
-            "心要碎了...", 
-            "真的不再考虑吗？", 
-            "你这人怎么这样",
-            "最后一次机会！"
-        ];
-        
-        // 点击不同意按钮逻辑：同意变大，不同意文本改变，且同一级按钮文本也可能变
-        btnDisagree.addEventListener('click', () => {
-            if (isAgreed) return;
-            disagreeCount++;
-            
-            // 改变不同意按钮的文本
-            const textIndex = Math.min(disagreeCount, disagreeTexts.length - 1);
-            btnDisagree.textContent = disagreeTexts[textIndex];
-            
-            // 改变同意按钮的文本
-            if (disagreeCount >= 2) {
-                btnAgree.textContent = "必须同意！";
-            }
-            if (disagreeCount >= 4) {
-                btnAgree.textContent = "快点同意啦！";
-            }
-            if (disagreeCount >= 6) {
-                btnAgree.textContent = "点这里！！！";
-            }
-            
-            // 同意按钮变大
-            const newFontSize = 16 + (disagreeCount * 12);
-            const newPadding = 36 + (disagreeCount * 15);
-            const newHeight = 55 + (disagreeCount * 22);
-            
-            btnAgree.style.fontSize = newFontSize + 'px';
-            btnAgree.style.padding = `0 ${newPadding}px`;
-            btnAgree.style.height = newHeight + 'px';
-            
-            // 防止主卡片宽度被限制而把大按钮挤压
-            mainCard.style.maxWidth = '100vw';
-        });
+    <script src="js/renderModels.js"></script>
 
-        // "同意" 逻辑
-        function handleAgree() {
-            if (isAgreed) return;
-            isAgreed = true;
-
-            // 撒花特效 (Confetti)
-            var duration = 3 * 1000;
-            var end = Date.now() + duration;
-
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#00ff88', '#fff', '#8b5cf6']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#00ff88', '#fff', '#ec4899']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-
-            // 更新UI元素
-            icon.textContent = "💖";
-            icon.style.animation = "none";
-            icon.style.transform = "scale(1.1)";
-            icon.style.background = "linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,255,136,0))";
-            icon.style.borderColor = "var(--primary)";
-            icon.style.boxShadow = "0 0 30px rgba(0, 255, 136, 0.4)";
-
-            title.textContent = "交易达成！";
-            title.style.color = "var(--primary)";
-            subtitle.textContent = "感谢老板的支持，好人一生平安！";
-
-            // 按钮状态更新
-            btnWrapper.classList.add('agreed');
-            
-            // 点击同意后重置按钮视觉状态到自然
-            btnAgree.style.fontSize = '';
-            btnAgree.style.padding = '';
-            btnAgree.style.height = '';
-            btnAgree.textContent = "已同意";
-            
-            // 隐藏不同意按钮
-            btnDisagree.style.display = 'none';
-
-            // 显示成功信息
-            messageBox.classList.add('show');
-            
-            // 卡片微级弹跳效果
-            mainCard.style.transform = "scale(1.03)";
-            setTimeout(() => {
-                mainCard.style.transform = "scale(1)";
-            }, 300);
-        }
-    </script>
+    <footer id="about">
+        <p>AI Video Models Directory · 2026</p>
+    </footer>
 </body>
 </html>
